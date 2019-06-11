@@ -1,15 +1,37 @@
 package edu.cnm.deepdive.atthemovies.model;
 
 import androidx.annotation.NonNull;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Movie {
+
   private static Long last_id = 0L;
   private Long id;
 
   private String title;
 
+  private String screenwriter;
+
+  public enum Genre{
+    HORROR, ACTION, ROMCOM, DOCUMENTARY, INDIE, EXPERIMENTAL
+  };
+
+  private Genre genre;
+
+  private List<Actor> actors = new ArrayList<>();
+
+
+  public List<Actor> getActors() {
+    return actors;
+  }
+
+  public void setActors(List<Actor> actors) {
+    this.actors = actors;
+  }
+
   public Movie() {
-   id = ++last_id;
+    id = ++last_id;
   }
 
   public Long getId() {
@@ -24,9 +46,26 @@ public class Movie {
     this.title = title;
   }
 
+  public String getScreenwriter() {
+    return screenwriter;
+  }
+
+  public void setScreenwriter(String screenwriter) {
+    this.screenwriter = screenwriter;
+  }
+
+  public Genre getGenre() {
+    return genre;
+  }
+
+  public void setGenre(Genre genre) {
+    this.genre = genre;
+  }
+
   @NonNull
   @Override
   public String toString() {
-    return title;
+
+    return title + ": " + genre;
   }
 }
