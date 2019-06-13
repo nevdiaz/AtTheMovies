@@ -3,13 +3,7 @@ package edu.cnm.deepdive.atthemovies;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.Spinner;
+import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
@@ -19,9 +13,10 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.Navigation;
 import edu.cnm.deepdive.atthemovies.model.Movie;
-import edu.cnm.deepdive.atthemovies.model.Movie.Genre;
 import edu.cnm.deepdive.atthemovies.viewmodel.MoviesViewModel;
+
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 
@@ -53,30 +48,28 @@ public class MoviesFragment extends Fragment {
 
     final MoviesViewModel viewModel = ViewModelProviders.of(getActivity()).get(MoviesViewModel.class);
 
-
-    viewModel.getMoviesLiveData(context).observe(this, new Observer<Map<Long, Movie>>() {
+    viewModel.getMoviesLiveData().observe(this, new Observer<List<Movie>>() {
       @Override
-      public void onChanged(Map<Long, Movie> longMovieMap) {
+      public void onChanged(List<Movie> movieList) {
         final ArrayAdapter<Movie> adapter = new ArrayAdapter<Movie>(context, android.R.layout.simple_list_item_1,
-            new ArrayList<Movie>(longMovieMap.values()));
+            movieList);
         moviesListView.setAdapter(adapter);
-        moviesListView.setOnItemClickListener(new OnItemClickListener() {
+        moviesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
           @Override
           public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            //this code opens the actor fragment and passes the movie id that was clicked
+            //This code opens the actor fragment and passes the movie id that was clicked
             MoviesFragmentDirections.ActionMoviesFragmentToActorsFragment action =
                 MoviesFragmentDirections.actionMoviesFragmentToActorsFragment()
                     .setMovieId(adapter.getItem(position).getId());
             Navigation.findNavController(view).navigate(action);
           }
         });
-
       }
     });
 
+
     final Spinner genreSpinner = view.findViewById(R.id.new_movie_genre);
-    ArrayAdapter<Movie.Genre> genreAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item,
-        Genre.values());
+    ArrayAdapter<Movie.Genre> genreAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, Movie.Genre.values());
     genreSpinner.setAdapter(genreAdapter);
 
     Button newMovieButton = view.findViewById(R.id.new_movie_button);
@@ -88,8 +81,8 @@ public class MoviesFragment extends Fragment {
         Movie newMovie = new Movie();
         newMovie.setTitle(newMovieNameEditText.getText().toString());
         newMovie.setScreenwriter(newMovieScreenwriter.getText().toString());
-        newMovie.setGenre((Movie.Genre)genreSpinner.getSelectedItem());
-        viewModel.addMovie(newMovie,context);
+        newMovie.setGenre((Movie.Genre) genreSpinner.getSelectedItem());
+        viewModel.addMovie(newMovie);
         newMovieNameEditText.setText("");
       }
     });

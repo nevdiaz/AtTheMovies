@@ -6,12 +6,10 @@ import androidx.room.PrimaryKey;
 import androidx.room.TypeConverter;
 import androidx.room.TypeConverters;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
 
 @Entity
-public class Movie<Entity> implements Serializable{
+public class Movie implements Serializable{
+
 
   private static final long serialVersionUID = 1L;
 
@@ -33,10 +31,13 @@ public class Movie<Entity> implements Serializable{
   private Genre genre;
 
 
-  private List<Actor> actors = new ArrayList<>();
 
   public Long getId() {
     return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
   }
 
   public String getTitle() {
@@ -47,13 +48,6 @@ public class Movie<Entity> implements Serializable{
     this.title = title;
   }
 
-  public List<Actor> getActors() {
-    return actors;
-  }
-
-  public void setActors(List<Actor> actors) {
-    this.actors = actors;
-  }
 
   public String getScreenwriter() {
     return screenwriter;
@@ -77,7 +71,7 @@ public class Movie<Entity> implements Serializable{
     return title + ": " + genre ;
   }
 
-  private static class GenreConverter {
+  public static class GenreConverter {
     @TypeConverter
     public static Genre stringToGenre(String value){
       return Genre.valueOf(value);
