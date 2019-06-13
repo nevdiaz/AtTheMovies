@@ -24,9 +24,6 @@ public class MoviesViewModel extends ViewModel {
     getMoviesLiveData(context).addMovie(movie);
   }
 
-  public void saveData(Context context){
-    FileService.getInstance(context).writeToFile(getMoviesLiveData(context).getValue());
-  }
 
   public Movie getMovie(Long id, Context context){
     return getMoviesLiveData(context).getValue().get(id);
