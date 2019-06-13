@@ -10,20 +10,18 @@ import java.util.Map;
 
 public class MoviesViewModel extends ViewModel {
 
-  private MutableLiveData<Map<Long, Movie>> movies;
+  private MoviesLiveData movies;
 
-  public MutableLiveData<Map<Long,Movie>> getMoviesLiveData(Context context) {
+  public MoviesLiveData getMoviesLiveData(Context context) {
     if (movies == null){
-      movies = new MutableLiveData<>();
-      FileService.getInstance(context).getFromFile(movies);
+      movies = new MoviesLiveData(context.getApplicationContext());
+
     }
     return movies;
   }
 
   public void addMovie(Movie movie,Context context) {
-    final Map<Long, Movie> movieMap= getMoviesLiveData(context).getValue();
-        movieMap.put(movie.getId(), movie);
-        getMoviesLiveData(context).setValue(movieMap);
+    getMoviesLiveData(context).addMovie(movie);
   }
 
   public void saveData(Context context){
