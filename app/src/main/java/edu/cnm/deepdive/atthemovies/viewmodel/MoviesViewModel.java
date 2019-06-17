@@ -5,6 +5,7 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import edu.cnm.deepdive.atthemovies.ActorMovieJoin;
 import edu.cnm.deepdive.atthemovies.MoviesDatabase;
 import edu.cnm.deepdive.atthemovies.model.Actor;
 import edu.cnm.deepdive.atthemovies.model.Movie;
@@ -20,6 +21,7 @@ public class MoviesViewModel extends AndroidViewModel {
     super(application);
     MoviesDatabase db = MoviesDatabase.getInstance(application);
     movies = db.movieDao().getAll();
+    actors = db.actorDao().getAll();
   }
   public LiveData<List<Movie>> getMoviesLiveData() {
     return movies;
@@ -50,6 +52,19 @@ public class MoviesViewModel extends AndroidViewModel {
   public LiveData<Movie> getMovie(Long id, Context context){
     MoviesDatabase db = MoviesDatabase.getInstance(getApplication());
     return db.movieDao().findById(id);
+
+  }
+
+  public void addActorToMovie(final Long movieId, final Long id) {
+    new Thread(new Runnable() {
+      @Override
+      public void run() {
+        ActorMovieJoin actorMovieJoin = new ActorMovieJoin();
+        actorMovieJoin.setMovieId(movieId);
+        actorMovieJoin.setActorId(id);
+        MoviesDatabase.getInstance(getApplication()).actorMovieJoinDao().insert(actorMovieJoin);
+      }
+    }).start();
 
   }
 }

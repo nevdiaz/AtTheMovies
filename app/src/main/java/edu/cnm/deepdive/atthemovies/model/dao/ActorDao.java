@@ -11,7 +11,7 @@ import java.util.List;
 public interface ActorDao {
 
   @Insert
-  void insert(Actor actor);
+  long insert(Actor actor);
 
   @Query("SELECT * FROM actor")
   LiveData<List<Actor>> getAll();
